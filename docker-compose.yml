@@ -1,0 +1,25 @@
+# docker-compose.yml (en la raíz del proyecto)
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: plazoleta-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: plazoleta_users
+      MYSQL_USER: plazoleta_user
+      MYSQL_PASSWORD: plazoleta123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    networks:
+      - plazoleta-network
+
+volumes:
+  mysql_data:
+
+networks:
+  plazoleta-network:
+    driver: bridge

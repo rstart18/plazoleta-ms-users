@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        //mavenLocal()
+        //maven { url = '...' }
+        gradlePluginPortal()
+    }
+}
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build-cache')
+    }
+}
+
+rootProject.name = 'PlazoletaMsUsers'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+include ':gateway-port'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+project(':gateway-port').projectDir = file('./domain/gateway')
+include ':api-rest'
+project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')
+include ':gateway-adapter'
+project(':gateway-adapter').projectDir = file('./infrastructure/driven-adapters/gateway')
+include ':jpa-repository'
+project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')
