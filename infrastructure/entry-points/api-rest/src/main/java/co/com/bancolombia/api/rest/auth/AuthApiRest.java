@@ -18,17 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthApiRest {
 
-    private final SignInService signInUseCase;
+    private final SignInService signInService;
     private final AuthDtoMapper authDtoMapper;
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> signIn(@RequestBody AuthCredentialsRequest request) {
-        System.out.println("=== DEBUG: Request recibido - email: " + request.getEmail() + ", password: " + (request.getPassword() != null ? "***" : "null"));
-
         Credentials credentials = authDtoMapper.toCredentials(request);
-        System.out.println("=== DEBUG: Credentials mapeado - username: " + credentials.username() + ", password: " + (credentials.password() != null ? "***" : "null"));
-
-        AuthenticationResult result = signInUseCase.execute(credentials);
+        AuthenticationResult result = signInService.execute(credentials);
         AuthenticationResponse response = authDtoMapper.toResponse(result);
         return ResponseEntity.ok(response);
     }

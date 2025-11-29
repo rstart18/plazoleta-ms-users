@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -23,25 +22,14 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
 
     @Override
     public AuthenticationResult authenticate(String username, String password) {
-        System.out.println("=== DEBUG: Intentando autenticar: " + username);
-        try {
-            Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
 
-            System.out.println("=== DEBUG: Autenticación exitosa para: " + username);
-            return AuthenticationResult.builder()
-                    .successful(true)
-                    .token(generateToken(auth))
-                    .authenticatedUser(mapToUser(auth))
-                    .build();
-
-        } catch (AuthenticationException e) {
-            System.out.println("=== DEBUG: Autenticación falló: " + e.getMessage());
-            return AuthenticationResult.builder()
-                    .successful(false)
-                    .build();
-        }
+        return AuthenticationResult.builder()
+                .token(generateToken(auth))
+                .authenticatedUser(mapToUser(auth))
+                .build();
     }
 
     private String generateToken(Authentication auth) {
@@ -56,7 +44,7 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
 
     private User mapToUser(Authentication auth) {
         return User.builder()
-                .name(auth.getName())
+                .email(auth.getName())
                 .build();
     }
 }

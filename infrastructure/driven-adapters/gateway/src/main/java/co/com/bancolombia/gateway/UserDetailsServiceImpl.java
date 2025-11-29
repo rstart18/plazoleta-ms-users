@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,21 +24,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
-        System.out.println("=== DEBUG: Usuario encontrado: " + user.getEmail());
-        System.out.println("=== DEBUG: Password hash: " + user.getPassword());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        // TEST: Verificar si el hash es correcto
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        boolean matches = encoder.matches("admin123", user.getPassword());
-        System.out.println("=== DEBUG: Password matches: " + matches);
-
-        List<GrantedAuthority> authority = new ArrayList<>();
-        authority.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-        UserDetails userDetails = new UserDetailsImpl(user.getEmail(), user.getPassword(), authority);
-        System.out.println("=== DEBUG: UserDetails creado correctamente");
-
-        return userDetails;
+        return new UserDetailsImpl(user.getEmail(), user.getPassword(), authorities);
     }
 
 
