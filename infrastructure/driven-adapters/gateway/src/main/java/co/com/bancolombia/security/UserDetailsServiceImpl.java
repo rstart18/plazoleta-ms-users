@@ -1,4 +1,4 @@
-package co.com.bancolombia.gateway;
+package co.com.bancolombia.security;
 
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserRepository;

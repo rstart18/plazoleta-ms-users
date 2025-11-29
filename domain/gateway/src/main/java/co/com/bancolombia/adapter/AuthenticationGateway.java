@@ -1,4 +1,4 @@
-package co.com.bancolombia.gateway;
+package co.com.bancolombia.adapter;
 
 import co.com.bancolombia.model.authenticationresult.AuthenticationResult;
 

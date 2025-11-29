@@ -1,4 +1,4 @@
-package co.com.bancolombia.gateway;
+package co.com.bancolombia.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
