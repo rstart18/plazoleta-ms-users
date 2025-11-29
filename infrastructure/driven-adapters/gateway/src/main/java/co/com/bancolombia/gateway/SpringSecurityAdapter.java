@@ -2,6 +2,7 @@ package co.com.bancolombia.gateway;
 
 import co.com.bancolombia.model.authenticationresult.AuthenticationResult;
 import co.com.bancolombia.model.authenticationresult.gateways.AuthenticationGateway;
+import co.com.bancolombia.model.exception.InvalidCredentialsException;
 import co.com.bancolombia.model.user.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -22,14 +24,19 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
 
     @Override
     public AuthenticationResult authenticate(String username, String password) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
 
-        return AuthenticationResult.builder()
-                .token(generateToken(auth))
-                .authenticatedUser(mapToUser(auth))
-                .build();
+            return AuthenticationResult.builder()
+                    .token(generateToken(auth))
+                    .authenticatedUser(mapToUser(auth))
+                    .build();
+
+        } catch (AuthenticationException ex) {
+            throw new InvalidCredentialsException();
+        }
     }
 
     private String generateToken(Authentication auth) {
