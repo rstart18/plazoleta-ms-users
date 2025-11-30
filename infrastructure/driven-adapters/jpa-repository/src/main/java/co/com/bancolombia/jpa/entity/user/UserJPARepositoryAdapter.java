@@ -10,8 +10,7 @@ import java.util.Optional;
 
 @Repository
 public class UserJPARepositoryAdapter extends AdapterOperations<User, UserEntity, Long, UserJPARepository>
- implements UserRepository
-{
+        implements UserRepository {
 
     public UserJPARepositoryAdapter(UserJPARepository repository, ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, User.class));
@@ -21,5 +20,10 @@ public class UserJPARepositoryAdapter extends AdapterOperations<User, UserEntity
     public Optional<User> findByEmail(String email) {
         return repository.findByEmail(email)
                 .map(this::toEntity);
+    }
+
+    @Override
+    public User create(User user) {
+        return toEntity(repository.save(toData(user)));
     }
 }

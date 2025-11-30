@@ -1,4 +1,4 @@
-package co.com.bancolombia.jpa.entity.user;
+package co.com.bancolombia.jpa.entity.role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,41 +13,24 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "roles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
-
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false, length = 100)
-    private String firstName;
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
-    @Column(name = "last_name", nullable = false, length = 100)
-    private String lastName;
-
-    @Column(name = "identity_document", unique = true, length = 20)
-    private String identityDocument;
-
-    @Column(name = "phone", length = 20)
-    private String phone;
-
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
-
-    @Column(name = "email", nullable = false, unique = true, length = 150)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "role_key", nullable = false, length = 100)
+    private String roleKey;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
