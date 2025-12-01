@@ -8,9 +8,10 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.security.core.AuthenticationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,32 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(org.springframework.security.authorization.AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDenied(org.springframework.security.authorization.AuthorizationDeniedException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .code(ErrorCode.ACCESS_DENIED.getCode())
+                .message(ErrorCode.ACCESS_DENIED.getDefaultMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(error -> error.getDefaultMessage()) // Solo el mensaje, sin el campo
+                .toList();
+
+        return ResponseEntity.badRequest().body(ErrorResponse.builder()
+                .code(ErrorCode.VALIDATION_ERROR.getCode())
+                .message("Error de validación")
+                .details(errors)
+                .timestamp(LocalDateTime.now())
+                .build());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

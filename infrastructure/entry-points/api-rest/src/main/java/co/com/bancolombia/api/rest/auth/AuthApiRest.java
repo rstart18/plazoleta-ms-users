@@ -1,5 +1,7 @@
 package co.com.bancolombia.api.rest.auth;
+
 import co.com.bancolombia.api.dto.request.AuthCredentialsRequest;
+import co.com.bancolombia.api.dto.response.ApiResponse;
 import co.com.bancolombia.api.dto.response.AuthenticationResponse;
 import co.com.bancolombia.api.mapper.dto.auth.AuthDtoMapper;
 import co.com.bancolombia.model.authenticationresult.AuthenticationResult;
@@ -22,10 +24,10 @@ public class AuthApiRest {
     private final AuthDtoMapper authDtoMapper;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody AuthCredentialsRequest request) {
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> signIn(@RequestBody AuthCredentialsRequest request) {
         Credentials credentials = authDtoMapper.toCredentials(request);
         AuthenticationResult result = signInService.execute(credentials);
         AuthenticationResponse response = authDtoMapper.toResponse(result);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.of(response));
     }
 }

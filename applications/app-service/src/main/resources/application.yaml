@@ -6,7 +6,7 @@ spring:
   devtools:
     add-properties: false
   datasource:
-    url: "jdbc:mysql://localhost:3306/plazoleta_users"
+    url: "jdbc:mysql://localhost:3306/plazoleta_users?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
     username: "plazoleta_user"
     password: "plazoleta123"
     driver-class-name: "com.mysql.cj.jdbc.Driver"
@@ -20,6 +20,9 @@ spring:
         dialect: "org.hibernate.dialect.MySQL8Dialect"
         format_sql: true
     databasePlatform: "org.hibernate.dialect.MySQL8Dialect"
+jwt:
+  secret: "mySecretKeyForJWTTokenGenerationThatIsLongEnoughForHS256Algorithm"
+  expiration: 86400000
 management:
   endpoints:
     web:

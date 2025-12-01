@@ -7,5 +7,7 @@ import java.util.Optional;
 public interface UserRepository {
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByIdentityDocument(String identityDocument);
+
     User create(User user);
 }

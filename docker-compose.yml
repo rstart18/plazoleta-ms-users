@@ -4,6 +4,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: plazoleta-mysql
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root123
       MYSQL_DATABASE: plazoleta_users

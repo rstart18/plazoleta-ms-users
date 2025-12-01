@@ -37,4 +37,7 @@ public class RoleEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }

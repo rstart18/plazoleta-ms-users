@@ -23,6 +23,12 @@ public class UserJPARepositoryAdapter extends AdapterOperations<User, UserEntity
     }
 
     @Override
+    public Optional<User> findByIdentityDocument(String identityDocument) {
+        return repository.findByIdentityDocument(identityDocument)
+                .map(this::toEntity);
+    }
+
+    @Override
     public User create(User user) {
         return toEntity(repository.save(toData(user)));
     }

@@ -5,5 +5,7 @@ import co.com.bancolombia.model.role.Role;
 import java.util.Optional;
 
 public interface RoleRepository {
-    Optional<Role> findByKey(String key);
+    Optional<Role> findByRoleKey(String roleKey);
+
+    Role findById(Long id);
 }

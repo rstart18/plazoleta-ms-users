@@ -17,7 +17,7 @@ public class RoleJPARepositoryAdapter extends AdapterOperations<Role, RoleEntity
     }
 
     @Override
-    public Optional<Role> findByKey(String key) {
-        return repository.findRoleByRoleKey(key).map(this::toEntity);
+    public Optional<Role> findByRoleKey(String roleKey) {
+        return repository.findByRoleKey(roleKey).map(this::toEntity);
     }
 }

@@ -1,15 +1,16 @@
 package co.com.bancolombia.api.dto.response;
 
-import java.time.LocalDateTime;
-
 import lombok.Builder;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class CreateOwnerResponse {
     private Long id;
     private String email;
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private LocalDateTime createdAt;
 }

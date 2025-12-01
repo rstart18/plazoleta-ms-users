@@ -6,21 +6,25 @@ import co.com.bancolombia.model.exception.InvalidCredentialsException;
 import co.com.bancolombia.model.user.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class SpringSecurityAdapter implements AuthenticationGateway {
     private final AuthenticationManager authenticationManager;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     @Override
     public AuthenticationResult authenticate(String username, String password) {
@@ -40,14 +44,21 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
     }
 
     private String generateToken(Authentication auth) {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        SecretKeySpec key = new SecretKeySpec(jwtSecret.getBytes(), "HmacSHA256");
+
+        String roles = auth.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.joining(","));
+
         return Jwts.builder()
                 .setSubject(auth.getName())
+                .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24 horas
-                .signWith(key)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     private User mapToUser(Authentication auth) {
         return User.builder()

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UserJPARepository extends CrudRepository<UserEntity, Long>, QueryByExampleExecutor<UserEntity> {
     Optional<UserEntity> findByEmail(String email);
+
+    Optional<UserEntity> findByIdentityDocument(String identityDocument);
 }

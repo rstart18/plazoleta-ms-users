@@ -6,6 +6,7 @@ import co.com.bancolombia.model.enums.RoleEnum;
 import co.com.bancolombia.model.exception.BusinessException;
 import co.com.bancolombia.model.role.Role;
 import co.com.bancolombia.model.role.gateways.RoleRepository;
+import co.com.bancolombia.model.security.gateways.PasswordEncoderGateway;
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserRepository;
 import co.com.bancolombia.model.userrole.UserRole;
@@ -19,6 +20,7 @@ public class CreateOwnerUseCase implements CreateOwnerService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final OwnerValidator ownerValidator;
+    private final PasswordEncoderGateway passwordEncoder;
 
     @Override
     public User execute(User owner) {
@@ -28,14 +30,23 @@ public class CreateOwnerUseCase implements CreateOwnerService {
             throw new BusinessException(DomainErrorCode.USER_ALREADY_EXISTS.getCode(), "Email already exists");
         }
 
-        Role ownerRole = roleRepository.findByKey(RoleEnum.OWNER.getRoleKey())
+        if (userRepository.findByIdentityDocument(owner.getIdentityDocument()).isPresent()) {
+            throw new BusinessException(DomainErrorCode.USER_ALREADY_EXISTS.getCode(), "Identity document already exists");
+        }
+
+        Role ownerRole = roleRepository.findByRoleKey(RoleEnum.OWNER.getRoleKey())
                 .orElseThrow(() -> new BusinessException(DomainErrorCode.ROLE_NOT_FOUND.getCode(), "Owner role not found"));
 
-        User savedUser = userRepository.create(owner);
+        String encodedPassword = passwordEncoder.encode(owner.getPassword());
+        User ownerWithEncodedPassword = owner.toBuilder()
+                .password(encodedPassword)
+                .build();
+
+        User savedUser = userRepository.create(ownerWithEncodedPassword);
 
         UserRole userRole = UserRole.builder()
-                .userId(savedUser.getId())
-                .roleId(ownerRole.getId())
+                .user(savedUser)
+                .role(ownerRole)
                 .build();
 
         userRoleRepository.create(userRole);

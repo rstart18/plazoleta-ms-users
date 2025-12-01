@@ -7,5 +7,5 @@ import java.util.Optional;
 
 
 public interface RoleJPARepository extends CrudRepository<RoleEntity, Long>, QueryByExampleExecutor<RoleEntity> {
-    Optional<RoleEntity> findRoleByRoleKey(String roleKey);
+    Optional<RoleEntity> findByRoleKey(String roleKey);
 }

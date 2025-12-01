@@ -2,6 +2,7 @@ package co.com.bancolombia.jpa.entity.userrole;
 
 import co.com.bancolombia.jpa.entity.role.RoleEntity;
 import co.com.bancolombia.jpa.entity.user.UserEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -43,4 +44,7 @@ public class UserRoleEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }
