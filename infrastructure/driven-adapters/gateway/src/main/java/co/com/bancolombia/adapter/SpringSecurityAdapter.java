@@ -4,6 +4,7 @@ import co.com.bancolombia.model.authenticationresult.AuthenticationResult;
 import co.com.bancolombia.model.authenticationresult.gateways.AuthenticationGateway;
 import co.com.bancolombia.model.exception.InvalidCredentialsException;
 import co.com.bancolombia.model.user.User;
+import co.com.bancolombia.security.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -50,15 +51,24 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
                 .map(authority -> authority.getAuthority())
                 .collect(Collectors.joining(","));
 
+        Long userId = getUserIdFromAuth(auth);
+
         return Jwts.builder()
                 .setSubject(auth.getName())
                 .claim("roles", roles)
+                .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
+    private Long getUserIdFromAuth(Authentication auth) {
+        if (auth.getPrincipal() instanceof UserDetailsImpl userDetails) {
+            return userDetails.getUserId();
+        }
+        return null;
+    }
 
     private User mapToUser(Authentication auth) {
         return User.builder()
