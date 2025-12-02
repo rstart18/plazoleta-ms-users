@@ -30,7 +30,7 @@ public class OwnerApiRest {
     @PreAuthorize(SecurityConstants.ROLE_ADMIN)
     public ResponseEntity<ApiResponse<CreateOwnerResponse>> createOwner(@Valid @RequestBody CreateOwnerRequest request) {
         User owner = ownerDtoMapper.toUser(request);
-        User ownerCreated = createOwnerService.execute(owner);
+        User ownerCreated = createOwnerService.createOwner(owner);
         CreateOwnerResponse response = ownerDtoMapper.toResponse(ownerCreated);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.of(response));
     }

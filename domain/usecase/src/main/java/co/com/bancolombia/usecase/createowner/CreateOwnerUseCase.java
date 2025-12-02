@@ -23,7 +23,7 @@ public class CreateOwnerUseCase implements CreateOwnerService {
     private final PasswordEncoderGateway passwordEncoder;
 
     @Override
-    public User execute(User owner) {
+    public User createOwner(User owner) {
         ownerValidator.validateCreateOwner(owner);
 
         if (userRepository.findByEmail(owner.getEmail()).isPresent()) {
