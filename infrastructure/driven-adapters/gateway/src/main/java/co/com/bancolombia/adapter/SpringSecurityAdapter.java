@@ -5,6 +5,7 @@ import co.com.bancolombia.model.authenticationresult.gateways.AuthenticationGate
 import co.com.bancolombia.model.exception.InvalidCredentialsException;
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.security.UserDetailsImpl;
+import co.com.bancolombia.usecase.loginattempt.LoginAttemptService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SpringSecurityAdapter implements AuthenticationGateway {
     private final AuthenticationManager authenticationManager;
+    private final LoginAttemptService loginAttemptService;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -30,9 +32,13 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
     @Override
     public AuthenticationResult authenticate(String username, String password) {
         try {
+            loginAttemptService.validateLoginAttempt(username);
+
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
+
+            loginAttemptService.resetAttempts(username);
 
             return AuthenticationResult.builder()
                     .token(generateToken(auth))
@@ -40,6 +46,7 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
                     .build();
 
         } catch (AuthenticationException ex) {
+            loginAttemptService.recordFailedAttempt(username);
             throw new InvalidCredentialsException();
         }
     }

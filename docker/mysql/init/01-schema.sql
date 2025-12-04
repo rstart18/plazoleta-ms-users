@@ -33,10 +33,22 @@ CREATE TABLE user_roles (
     UNIQUE KEY unique_user_role (user_id, role_id)
 );
 
+CREATE TABLE login_attempts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    attempts INT DEFAULT 0,
+    last_attempt TIMESTAMP NULL,
+    locked_until TIMESTAMP NULL,
+    is_locked BOOLEAN DEFAULT FALSE,
+    INDEX idx_email (email)  -- Índice para búsquedas rápidas
+);
+
 -- Insertar roles con IDs constantes
 INSERT INTO roles (id, name, role_key) VALUES
 (1, 'Admin', 'ADMIN'),
-(2, 'Owner', 'OWNER');
+(2, 'Owner', 'OWNER'),
+(3, 'Empleado', 'EMPLOYEE'),
+(4, 'Cliente', 'CLIENT');
 
 -- Usuario admin para testing
 INSERT INTO users (first_name, last_name, identity_document, email, password, phone, birth_date) VALUES

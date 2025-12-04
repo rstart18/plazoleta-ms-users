@@ -11,7 +11,8 @@ public enum DomainErrorCode {
     INVALID_CREDENTIALS("INVALID_CREDENTIALS", "Credenciales inválidas"),
     USER_ALREADY_EXISTS("USER_ALREADY_EXISTS", "El usuario ya existe"),
     INVALID_USER_DATA("INVALID_USER_DATA", "Datos de usuario inválidos"),
-    UNAUTHORIZED_ACCESS("UNAUTHORIZED_ACCESS", "Acceso no autorizado");
+    UNAUTHORIZED_ACCESS("UNAUTHORIZED_ACCESS", "Acceso no autorizado"),
+    ACCOUNT_LOCKED("ACCOUNT_LOCKED", "Cuenta bloqueada");
 
     private final String code;
     private final String message;
