@@ -37,3 +37,6 @@ cors:
 login:
   maxAttempts: 3
   lockout-duration: 15 #minutes
+services:
+  foodcourt:
+    url: http://localhost:8081
