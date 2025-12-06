@@ -82,7 +82,7 @@ class LoginAttemptUseCaseTest {
                 () -> loginAttemptUseCase.validateLoginAttempt(email));
 
         assertEquals(DomainErrorCode.ACCOUNT_LOCKED.getCode(), exception.getCode());
-        assertEquals("Cuenta bloqueada", exception.getMessage());
+        assertEquals(DomainErrorCode.ACCOUNT_LOCKED.getMessage(), exception.getMessage());
 
         verify(loginAttemptRepository).findByEmail(email);
     }

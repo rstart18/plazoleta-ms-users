@@ -22,9 +22,7 @@ public class LoginAttemptUseCase implements LoginAttemptService {
 
         if (attempt != null && attempt.getIsLocked() &&
                 attempt.getLockedUntil().isAfter(LocalDateTime.now())) {
-            throw new BusinessException(
-                    DomainErrorCode.ACCOUNT_LOCKED.getCode(),
-                    DomainErrorCode.ACCOUNT_LOCKED.getMessage());
+            throw new BusinessException(DomainErrorCode.ACCOUNT_LOCKED);
         }
     }
 

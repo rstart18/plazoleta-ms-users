@@ -6,7 +6,6 @@ public class InvalidCredentialsException extends BusinessException {
     private static final long serialVersionUID = 1002L;
     
     public InvalidCredentialsException() {
-        super(DomainErrorCode.INVALID_CREDENTIALS.getCode(),
-                DomainErrorCode.INVALID_CREDENTIALS.getMessage());
+        super(DomainErrorCode.INVALID_CREDENTIALS);
     }
 }

@@ -32,25 +32,25 @@ public class OwnerValidator {
     public void validateAge(LocalDate birthDate) {
         int age = Period.between(birthDate, LocalDate.now()).getYears();
         if (age < 18) {
-            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA.getCode(), "El usuario debe tener mas de 18 años");
+            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA);
         }
     }
 
     public void validateEmail(String email) {
         if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
-            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA.getCode(), "El formato del email es inválido");
+            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA);
         }
     }
 
     public void validatePhone(String phone) {
         if (phone == null || !PHONE_PATTERN.matcher(phone).matches()) {
-            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA.getCode(), "El teléfono debe contener máximo 13 caracteres y puede incluir el símbolo +");
+            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA);
         }
     }
 
     public void validateDocumentId(String documentId) {
         if (documentId == null || !DOCUMENT_PATTERN.matcher(documentId).matches()) {
-            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA.getCode(), "El documento de identidad debe ser únicamente numérico");
+            throw new BusinessException(DomainErrorCode.INVALID_USER_DATA);
         }
     }
 }

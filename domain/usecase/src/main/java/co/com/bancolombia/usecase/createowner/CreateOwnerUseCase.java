@@ -27,15 +27,15 @@ public class CreateOwnerUseCase implements CreateOwnerService {
         ownerValidator.validateCreateOwner(owner);
 
         if (userRepository.findByEmail(owner.getEmail()).isPresent()) {
-            throw new BusinessException(DomainErrorCode.USER_ALREADY_EXISTS.getCode(), "Email already exists");
+            throw new BusinessException(DomainErrorCode.USER_ALREADY_EXISTS);
         }
 
         if (userRepository.findByIdentityDocument(owner.getIdentityDocument()).isPresent()) {
-            throw new BusinessException(DomainErrorCode.USER_ALREADY_EXISTS.getCode(), "Identity document already exists");
+            throw new BusinessException(DomainErrorCode.USER_ALREADY_EXISTS);
         }
 
         Role ownerRole = roleRepository.findByRoleKey(RoleEnum.OWNER.getRoleKey())
-                .orElseThrow(() -> new BusinessException(DomainErrorCode.ROLE_NOT_FOUND.getCode(), "Owner role not found"));
+                .orElseThrow(() -> new BusinessException(DomainErrorCode.ROLE_NOT_FOUND));
 
         String encodedPassword = passwordEncoder.encode(owner.getPassword());
         User ownerWithEncodedPassword = owner.toBuilder()

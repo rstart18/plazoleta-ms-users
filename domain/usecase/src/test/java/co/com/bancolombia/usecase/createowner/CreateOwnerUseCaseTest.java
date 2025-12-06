@@ -115,7 +115,7 @@ class CreateOwnerUseCaseTest {
                 () -> createOwnerUseCase.createOwner(owner));
 
         assertEquals(DomainErrorCode.USER_ALREADY_EXISTS.getCode(), exception.getCode());
-        assertEquals("Email already exists", exception.getMessage());
+        assertEquals(DomainErrorCode.USER_ALREADY_EXISTS.getMessage(), exception.getMessage());
 
         verify(ownerValidator).validateCreateOwner(owner);
         verify(userRepository).findByEmail(owner.getEmail());
@@ -133,7 +133,7 @@ class CreateOwnerUseCaseTest {
                 () -> createOwnerUseCase.createOwner(owner));
 
         assertEquals(DomainErrorCode.USER_ALREADY_EXISTS.getCode(), exception.getCode());
-        assertEquals("Identity document already exists", exception.getMessage());
+        assertEquals(DomainErrorCode.USER_ALREADY_EXISTS.getMessage(), exception.getMessage());
 
         verify(ownerValidator).validateCreateOwner(owner);
         verify(userRepository).findByEmail(owner.getEmail());
@@ -153,7 +153,7 @@ class CreateOwnerUseCaseTest {
                 () -> createOwnerUseCase.createOwner(owner));
 
         assertEquals(DomainErrorCode.ROLE_NOT_FOUND.getCode(), exception.getCode());
-        assertEquals("Owner role not found", exception.getMessage());
+        assertEquals(DomainErrorCode.ROLE_NOT_FOUND.getMessage(), exception.getMessage());
 
         verify(ownerValidator).validateCreateOwner(owner);
         verify(userRepository).findByEmail(owner.getEmail());
@@ -165,7 +165,7 @@ class CreateOwnerUseCaseTest {
     @Test
     void shouldThrowExceptionWhenValidationFails() {
         // Given
-        doThrow(new BusinessException(DomainErrorCode.INVALID_USER_DATA.getCode(), "Invalid age"))
+        doThrow(new BusinessException(DomainErrorCode.INVALID_USER_DATA))
                 .when(ownerValidator).validateCreateOwner(owner);
 
         // When & Then
@@ -173,7 +173,7 @@ class CreateOwnerUseCaseTest {
                 () -> createOwnerUseCase.createOwner(owner));
 
         assertEquals(DomainErrorCode.INVALID_USER_DATA.getCode(), exception.getCode());
-        assertEquals("Invalid age", exception.getMessage());
+        assertEquals(DomainErrorCode.INVALID_USER_DATA.getMessage(), exception.getMessage());
 
         verify(ownerValidator).validateCreateOwner(owner);
         verify(userRepository, never()).findByEmail(any());
