@@ -71,10 +71,11 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
     }
 
     private Long getUserIdFromAuth(Authentication auth) {
+        Long userId = null;
         if (auth.getPrincipal() instanceof UserDetailsImpl userDetails) {
-            return userDetails.getUserId();
+            userId = userDetails.getUserId();
         }
-        return null;
+        return userId;
     }
 
     private User mapToUser(Authentication auth) {
