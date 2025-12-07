@@ -20,7 +20,7 @@ public class GetUserRoleUseCase implements GetUserRoleService {
     public List<String> getUserRoles(Long userId) {
         User user = userRepository.findById(userId);
         if (user == null) {
-            throw new BusinessException(DomainErrorCode.USER_NOT_FOUND.getCode(), DomainErrorCode.USER_NOT_FOUND.getMessage());
+            throw new BusinessException(DomainErrorCode.USER_NOT_FOUND);
         }
 
         List<UserRole> userRoles = userRoleRepository.findByUserId(userId);
