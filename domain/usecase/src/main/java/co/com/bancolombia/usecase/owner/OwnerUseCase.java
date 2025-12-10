@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.createowner;
+package co.com.bancolombia.usecase.owner;
 
 
 import co.com.bancolombia.model.enums.DomainErrorCode;
@@ -15,7 +15,7 @@ import co.com.bancolombia.validator.OwnerValidator;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CreateOwnerUseCase implements CreateOwnerService {
+public class OwnerUseCase implements OwnerService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;

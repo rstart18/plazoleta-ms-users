@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.getuserrole;
+package co.com.bancolombia.usecase.userrole;
 
 import co.com.bancolombia.model.enums.DomainErrorCode;
 import co.com.bancolombia.model.exception.BusinessException;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class GetUserRoleUseCase implements GetUserRoleService {
+public class UserRoleUseCase implements UserRoleService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;

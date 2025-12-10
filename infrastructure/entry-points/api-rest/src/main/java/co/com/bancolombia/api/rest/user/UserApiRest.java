@@ -3,7 +3,7 @@ package co.com.bancolombia.api.rest.user;
 import co.com.bancolombia.api.constans.SecurityConstants;
 import co.com.bancolombia.api.dto.response.ApiResponse;
 import co.com.bancolombia.api.dto.response.UserRoleResponse;
-import co.com.bancolombia.usecase.getuserrole.GetUserRoleService;
+import co.com.bancolombia.usecase.userrole.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserApiRest {
 
-    private final GetUserRoleService getUserRoleService;
+    private final UserRoleService getUserRoleService;
 
     @GetMapping("/{userId}/roles")
     @PreAuthorize(SecurityConstants.ROLE_ADMIN)

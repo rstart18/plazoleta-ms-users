@@ -1,4 +1,4 @@
-package co.com.bancolombia.usecase.createowner;
+package co.com.bancolombia.usecase.owner;
 
 import co.com.bancolombia.model.enums.DomainErrorCode;
 import co.com.bancolombia.model.enums.RoleEnum;
@@ -49,7 +49,7 @@ class CreateOwnerUseCaseTest {
     private PasswordEncoderGateway passwordEncoder;
 
     @InjectMocks
-    private CreateOwnerUseCase createOwnerUseCase;
+    private OwnerUseCase createOwnerUseCase;
 
     private User owner;
     private Role ownerRole;

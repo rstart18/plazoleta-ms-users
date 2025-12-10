@@ -6,7 +6,7 @@ import co.com.bancolombia.api.dto.response.ApiResponse;
 import co.com.bancolombia.api.dto.response.CreateOwnerResponse;
 import co.com.bancolombia.api.mapper.dto.user.OwnerDtoMapper;
 import co.com.bancolombia.model.user.User;
-import co.com.bancolombia.usecase.createowner.CreateOwnerService;
+import co.com.bancolombia.usecase.owner.OwnerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OwnerApiRest {
 
-    private final CreateOwnerService createOwnerService;
+    private final OwnerService createOwnerService;
     private final OwnerDtoMapper ownerDtoMapper;
 
     @PostMapping
