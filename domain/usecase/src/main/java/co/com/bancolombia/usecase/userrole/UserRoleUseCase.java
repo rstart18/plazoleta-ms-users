@@ -6,6 +6,7 @@ import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserRepository;
 import co.com.bancolombia.model.userrole.UserRole;
 import co.com.bancolombia.model.userrole.gateways.UserRoleRepository;
+import co.com.bancolombia.usecase.validator.RoleValidator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class UserRoleUseCase implements UserRoleService {
     private final UserRoleRepository userRoleRepository;
 
     @Override
-    public List<String> getUserRoles(Long userId) {
+    public List<String> getUserRoles(Long userId, String userRole) {
+        RoleValidator.validateAdminRole(userRole);
         User user = userRepository.findById(userId);
         if (user == null) {
             throw new BusinessException(DomainErrorCode.USER_NOT_FOUND);
@@ -25,7 +27,7 @@ public class UserRoleUseCase implements UserRoleService {
 
         List<UserRole> userRoles = userRoleRepository.findByUserId(userId);
         return userRoles.stream()
-                .map(userRole -> userRole.getRole().getRoleKey())
+                .map(ur -> ur.getRole().getRoleKey())
                 .toList();
     }
 }

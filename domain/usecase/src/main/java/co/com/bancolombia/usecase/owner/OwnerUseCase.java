@@ -11,6 +11,7 @@ import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserRepository;
 import co.com.bancolombia.model.userrole.UserRole;
 import co.com.bancolombia.model.userrole.gateways.UserRoleRepository;
+import co.com.bancolombia.usecase.validator.RoleValidator;
 import co.com.bancolombia.validator.OwnerValidator;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,8 @@ public class OwnerUseCase implements OwnerService {
     private final PasswordEncoderGateway passwordEncoder;
 
     @Override
-    public User createOwner(User owner) {
+    public User createOwner(User owner, String userRole) {
+        RoleValidator.validateAdminRole(userRole);
         ownerValidator.validateCreateOwner(owner);
 
         if (userRepository.findByEmail(owner.getEmail()).isPresent()) {
@@ -44,12 +46,12 @@ public class OwnerUseCase implements OwnerService {
 
         User savedUser = userRepository.create(ownerWithEncodedPassword);
 
-        UserRole userRole = UserRole.builder()
+        UserRole ownerUserRole = UserRole.builder()
                 .user(savedUser)
                 .role(ownerRole)
                 .build();
 
-        userRoleRepository.create(userRole);
+        userRoleRepository.create(ownerUserRole);
 
         return savedUser;
     }
