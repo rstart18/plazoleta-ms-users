@@ -9,6 +9,8 @@ public enum DomainErrorCode {
     // User errors
     USER_NOT_FOUND("USER_NOT_FOUND", "Usuario no encontrado"),
     USER_ALREADY_EXISTS("USER_ALREADY_EXISTS", "El usuario ya existe"),
+    EMAIL_ALREADY_EXISTS("EMAIL_ALREADY_EXISTS", "Ya existe un usuario con este correo electrónico"),
+    DOCUMENT_ALREADY_EXISTS("DOCUMENT_ALREADY_EXISTS", "Ya existe un usuario con este número de identificación"),
     INVALID_USER_DATA("INVALID_USER_DATA", "Datos de usuario inválidos"),
     INVALID_EMAIL("INVALID_EMAIL", "Email inválido"),
     INVALID_PHONE("INVALID_PHONE", "Teléfono inválido"),
@@ -24,7 +26,12 @@ public enum DomainErrorCode {
     
     // Role errors
     ROLE_NOT_FOUND("ROLE_NOT_FOUND", "Rol no encontrado"),
-    INSUFFICIENT_PERMISSIONS("INSUFFICIENT_PERMISSIONS", "Permisos insuficientes");
+    INSUFFICIENT_PERMISSIONS("INSUFFICIENT_PERMISSIONS", "Permisos insuficientes"),
+    
+    // Employee errors
+    EMPLOYEE_NOT_FOUND("EMPLOYEE_NOT_FOUND", "Empleado no encontrado"),
+    USER_NOT_EMPLOYEE("USER_NOT_EMPLOYEE", "El usuario no es empleado"),
+    RESTAURANT_NOT_ASSIGNED("RESTAURANT_NOT_ASSIGNED", "Empleado no tiene restaurante asignado");
 
     private final String code;
     private final String message;
