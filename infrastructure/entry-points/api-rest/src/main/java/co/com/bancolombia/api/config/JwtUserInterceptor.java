@@ -16,6 +16,8 @@ public class JwtUserInterceptor implements HandlerInterceptor {
 
     private static final String USER_ID_ATTRIBUTE = "userId";
     private static final String USER_ROLE_ATTRIBUTE = "userRole";
+    private static final String USER_EMAIL_ATTRIBUTE = "userEmail";
+    private static final String USER_PHONE_ATTRIBUTE = "userPhone";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -23,10 +25,33 @@ public class JwtUserInterceptor implements HandlerInterceptor {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             Long userId = extractUserIdFromToken(authHeader);
             String userRole = extractUserRoleFromToken(authHeader);
+            String userEmail = extractUserEmailFromToken(authHeader);
+            String userPhone = extractUserPhoneFromToken(authHeader);
             request.setAttribute(USER_ID_ATTRIBUTE, userId);
             request.setAttribute(USER_ROLE_ATTRIBUTE, userRole);
+            request.setAttribute(USER_EMAIL_ATTRIBUTE, userEmail);
+            request.setAttribute(USER_PHONE_ATTRIBUTE, userPhone);
         }
         return true;
+    }
+
+    public static String getUserEmail(HttpServletRequest request) {
+        return (String) request.getAttribute(USER_EMAIL_ATTRIBUTE);
+    }
+
+    private String extractUserEmailFromToken(String authorizationHeader) {
+        try {
+            String token = authorizationHeader.replace("Bearer ", "");
+            String[] parts = token.split("\\.");
+            String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> claims = mapper.readValue(payload, Map.class);
+            return (String) claims.get("sub");
+        } catch (Exception e) {
+            throw new BusinessException(
+                    DomainErrorCode.INVALID_TOKEN
+            );
+        }
     }
 
     private Long extractUserIdFromToken(String authorizationHeader) {
@@ -41,18 +66,18 @@ public class JwtUserInterceptor implements HandlerInterceptor {
 
             Number userId = (Number) claims.get("userId");
             String errorMessage = userId == null ? "Token JWT no contiene userId" : null;
-            
+
             if (errorMessage != null) {
                 throw new BusinessException(DomainErrorCode.INVALID_TOKEN);
             }
-            
+
             result = userId.longValue();
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
             throw new BusinessException(DomainErrorCode.INVALID_TOKEN);
         }
-        
+
         return result;
     }
 
@@ -76,5 +101,22 @@ public class JwtUserInterceptor implements HandlerInterceptor {
 
     public static String getUserRole(HttpServletRequest request) {
         return (String) request.getAttribute(USER_ROLE_ATTRIBUTE);
+    }
+
+    public static String getUserPhone(HttpServletRequest request) {
+        return (String) request.getAttribute(USER_PHONE_ATTRIBUTE);
+    }
+
+    private String extractUserPhoneFromToken(String authorizationHeader) {
+        try {
+            String token = authorizationHeader.replace("Bearer ", "");
+            String[] parts = token.split("\\.");
+            String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> claims = mapper.readValue(payload, Map.class);
+            return (String) claims.get("phone");
+        } catch (Exception e) {
+            throw new BusinessException(DomainErrorCode.INVALID_TOKEN);
+        }
     }
 }
