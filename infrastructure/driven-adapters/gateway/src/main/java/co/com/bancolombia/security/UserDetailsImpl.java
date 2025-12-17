@@ -12,6 +12,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Getter
     private final Long userId;
+    @Getter
+    private final String phone;
     private final String email;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;

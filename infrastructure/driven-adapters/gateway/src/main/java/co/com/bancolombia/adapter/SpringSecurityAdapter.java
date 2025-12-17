@@ -59,11 +59,13 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
                 .collect(Collectors.joining(","));
 
         Long userId = getUserIdFromAuth(auth);
+        String phone = getUserPhoneFromAuth(auth);
 
         return Jwts.builder()
                 .setSubject(auth.getName())
                 .claim("roles", roles)
                 .claim("userId", userId)
+                .claim("phone", phone)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -76,6 +78,14 @@ public class SpringSecurityAdapter implements AuthenticationGateway {
             userId = userDetails.getUserId();
         }
         return userId;
+    }
+
+    private String getUserPhoneFromAuth(Authentication auth) {
+        String phone = null;
+        if (auth.getPrincipal() instanceof UserDetailsImpl userDetails) {
+            phone = userDetails.getPhone();
+        }
+        return phone;
     }
 
     private User mapToUser(Authentication auth) {
