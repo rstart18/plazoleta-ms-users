@@ -2,7 +2,7 @@ package co.com.bancolombia.api.rest.employee;
 
 import co.com.bancolombia.api.config.JwtUserInterceptor;
 import co.com.bancolombia.api.dto.request.CreateEmployeeRequest;
-import co.com.bancolombia.api.dto.response.ApiResponse;
+import co.com.bancolombia.api.dto.response.ApiResponseData;
 import co.com.bancolombia.api.dto.response.CreateEmployeeResponse;
 import co.com.bancolombia.api.dto.response.EmployeeRestaurantResponse;
 import co.com.bancolombia.api.mapper.dto.user.EmployeeDtoMapper;
@@ -30,23 +30,23 @@ public class EmployeeApiRest {
     private final EmployeeDtoMapper employeeDtoMapper;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateEmployeeResponse>> createEmployee(
+    public ResponseEntity<ApiResponseData<CreateEmployeeResponse>> createEmployee(
             @Valid @RequestBody CreateEmployeeRequest request,
             HttpServletRequest httpRequest) {
         String userRole = JwtUserInterceptor.getUserRole(httpRequest);
         Long ownerId = JwtUserInterceptor.getUserId(httpRequest);
-        
+
         User employee = employeeDtoMapper.toUser(request);
         User employeeCreated = employeeService.createEmployee(employee, request.getRestaurantId(), userRole, ownerId);
         CreateEmployeeResponse response = employeeDtoMapper.toResponse(employeeCreated, request.getRestaurantId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.of(response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseData.of(response));
     }
 
     @GetMapping("/{employeeId}/restaurant")
-    public ResponseEntity<ApiResponse<EmployeeRestaurantResponse>> getEmployeeRestaurant(
+    public ResponseEntity<ApiResponseData<EmployeeRestaurantResponse>> getEmployeeRestaurant(
             @PathVariable("employeeId") Long employeeId) {
         Long restaurantId = employeeService.getEmployeeRestaurant(employeeId);
         EmployeeRestaurantResponse response = new EmployeeRestaurantResponse(restaurantId);
-        return ResponseEntity.ok(ApiResponse.of(response));
+        return ResponseEntity.ok(ApiResponseData.of(response));
     }
 }

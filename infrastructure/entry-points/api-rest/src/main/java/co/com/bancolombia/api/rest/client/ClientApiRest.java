@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.rest.client;
 
 import co.com.bancolombia.api.dto.request.CreateClientRequest;
-import co.com.bancolombia.api.dto.response.ApiResponse;
+import co.com.bancolombia.api.dto.response.ApiResponseData;
 import co.com.bancolombia.api.dto.response.CreateClientResponse;
 import co.com.bancolombia.api.mapper.dto.user.ClientDtoMapper;
 import co.com.bancolombia.model.user.User;
@@ -25,10 +25,10 @@ public class ClientApiRest {
     private final ClientDtoMapper clientDtoMapper;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateClientResponse>> createClient(@Valid @RequestBody CreateClientRequest request) {
+    public ResponseEntity<ApiResponseData<CreateClientResponse>> createClient(@Valid @RequestBody CreateClientRequest request) {
         User client = clientDtoMapper.toUser(request);
         User clientCreated = clientService.createClient(client);
         CreateClientResponse response = clientDtoMapper.toResponse(clientCreated);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.of(response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseData.of(response));
     }
 }

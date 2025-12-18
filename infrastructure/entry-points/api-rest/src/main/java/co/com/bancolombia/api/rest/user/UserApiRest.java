@@ -1,7 +1,7 @@
 package co.com.bancolombia.api.rest.user;
 
 import co.com.bancolombia.api.config.JwtUserInterceptor;
-import co.com.bancolombia.api.dto.response.ApiResponse;
+import co.com.bancolombia.api.dto.response.ApiResponseData;
 import co.com.bancolombia.api.dto.response.UserRoleResponse;
 import co.com.bancolombia.usecase.userrole.UserRoleService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +23,12 @@ public class UserApiRest {
     private final UserRoleService getUserRoleService;
 
     @GetMapping("/{userId}/roles")
-    public ResponseEntity<ApiResponse<UserRoleResponse>> getUserRoles(
+    public ResponseEntity<ApiResponseData<UserRoleResponse>> getUserRoles(
             @PathVariable("userId") Long userId,
             HttpServletRequest httpRequest) {
         String userRole = JwtUserInterceptor.getUserRole(httpRequest);
         List<String> roles = getUserRoleService.getUserRoles(userId, userRole);
         UserRoleResponse response = new UserRoleResponse(roles);
-        return ResponseEntity.ok(ApiResponse.of(response));
+        return ResponseEntity.ok(ApiResponseData.of(response));
     }
 }

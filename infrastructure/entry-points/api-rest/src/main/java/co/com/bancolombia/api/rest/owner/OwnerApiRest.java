@@ -2,7 +2,7 @@ package co.com.bancolombia.api.rest.owner;
 
 import co.com.bancolombia.api.config.JwtUserInterceptor;
 import co.com.bancolombia.api.dto.request.CreateOwnerRequest;
-import co.com.bancolombia.api.dto.response.ApiResponse;
+import co.com.bancolombia.api.dto.response.ApiResponseData;
 import co.com.bancolombia.api.dto.response.CreateOwnerResponse;
 import co.com.bancolombia.api.mapper.dto.user.OwnerDtoMapper;
 import co.com.bancolombia.model.user.User;
@@ -27,13 +27,13 @@ public class OwnerApiRest {
     private final OwnerDtoMapper ownerDtoMapper;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateOwnerResponse>> createOwner(
+    public ResponseEntity<ApiResponseData<CreateOwnerResponse>> createOwner(
             @Valid @RequestBody CreateOwnerRequest request,
             HttpServletRequest httpRequest) {
         String userRole = JwtUserInterceptor.getUserRole(httpRequest);
         User owner = ownerDtoMapper.toUser(request);
         User ownerCreated = createOwnerService.createOwner(owner, userRole);
         CreateOwnerResponse response = ownerDtoMapper.toResponse(ownerCreated);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.of(response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseData.of(response));
     }
 }
